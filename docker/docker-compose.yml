@@ -1,0 +1,23 @@
+version: "2"
+
+services:
+  app:
+    image: docker.io/library/entwuerfe:0.0.1-SNAPSHOT
+    #    environment:
+    #      - LOGGING_LEVEL_CH_EWZ_KUS=TRACE
+    #      - LOGGING_LEVEL_CH_EWZ_MEINEWZ=TRACE
+    #      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Dorg.apache.cxf.stax.maxChildElements=10000000 -Dorg.apache.cxf.stax.maxElementDepth=10000000 -Dorg.apache.cxf.stax.maxAttributeCount=5000
+    ports:
+      - "5005:5005"
+      - "8080:8080"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:11
+    environment:
+      - POSTGRES_DB=dhcd
+      - POSTGRES_USER=dhcd
+      - POSTGRES_PASSWORD=dhcd-db-password
+    ports:
+      - "5432:5432"
