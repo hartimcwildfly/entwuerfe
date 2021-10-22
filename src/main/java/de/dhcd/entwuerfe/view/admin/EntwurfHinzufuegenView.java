@@ -1,4 +1,4 @@
-package de.dhcd.entwuerfe.view;
+package de.dhcd.entwuerfe.view.admin;
 
 
 import com.vaadin.flow.component.button.Button;
@@ -15,7 +15,7 @@ import io.vavr.control.Try;
 
 
 @PageTitle("Entwurf hinzufügen")
-@Route(value = "entwurf-hinzufuegen")
+@Route(value = "entwurf-hinzufuegen", layout = AdminLayout.class)
 public class EntwurfHinzufuegenView extends VerticalLayout {
     
     private final EntwurfRepository entwurfRepository;
@@ -40,7 +40,10 @@ public class EntwurfHinzufuegenView extends VerticalLayout {
     
         Button createButton = new Button("Abschicken");
         createButton.addClickListener(clickEvent -> {
-            Try.of(() -> receiver.getInputStream().readAllBytes()).map(Entwurf::erstelle).forEach(entwurfRepository::create);
+            Try.of(() -> receiver.getInputStream().readAllBytes()).map(Entwurf::erstelle).forEach(it -> {
+                entwurfRepository.create(it);
+                this.getUI().ifPresent(ui -> ui.navigate(OffeneEntwuerfeView.class));
+            });
         });
         
         this.add(kundenname, kundennummer, projektname, upload, createButton);
