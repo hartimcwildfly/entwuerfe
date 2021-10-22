@@ -4,6 +4,7 @@ package de.dhcd.entwuerfe.model;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+import io.vavr.control.Try;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,6 +31,8 @@ public class Entwurf {
     
     
     public static Entwurf erstelle(byte[] content) {
+        Try.of(() -> content[0] == 0xFF && content[1] == 0xD8).filter(it -> it).getOrElseThrow(
+                KeinJPEGBildException::new);
         return new Entwurf(null, UUID.randomUUID(), content, null, null, null, null, null, OffsetDateTime.now());
     }
     
