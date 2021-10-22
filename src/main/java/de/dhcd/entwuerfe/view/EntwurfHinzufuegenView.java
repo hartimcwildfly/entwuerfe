@@ -15,7 +15,7 @@ import io.vavr.control.Try;
 
 
 @PageTitle("Entwurf hinzufügen")
-@Route(value = "createEntwurf")
+@Route(value = "entwurf-hinzufuegen")
 public class EntwurfHinzufuegenView extends VerticalLayout {
     
     private final EntwurfRepository entwurfRepository;

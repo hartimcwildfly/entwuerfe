@@ -11,7 +11,7 @@ public class EntwurfMapper {
     public static EntwurfRecord toRecord(Entwurf entwurf) {
         EntwurfRecord entwurfRecord = new EntwurfRecord();
     
-        Option.of(entwurf.getId()).forEach(entwurfRecord::setId);
+        Option.of(entwurf.getId()).forEach(entwurfRecord::setId); // setId(null) and not calling setId at all results in different behaviour
         entwurfRecord.setUuid(entwurf.getUuid());
         entwurfRecord.setEntwurf(entwurf.getContent());
         entwurfRecord.setAkzeptiert(entwurf.getConfirmed());

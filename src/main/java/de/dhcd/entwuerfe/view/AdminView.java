@@ -3,6 +3,7 @@ package de.dhcd.entwuerfe.view;
 
 import java.util.stream.Stream;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.notification.Notification;
@@ -19,12 +20,10 @@ import de.dhcd.entwuerfe.model.Entwurf;
 import de.dhcd.entwuerfe.model.EntwurfRepository;
 
 
-@PageTitle("Hello World")
-@Route(value = "hello")
+@PageTitle("Adminübersicht")
+@Route(value = "admin")
 public class AdminView extends HorizontalLayout implements AfterNavigationObserver {
     
-    private TextField name;
-    private Button    sayHello;
     private final EntwurfRepository entwurfRepository;
     private Grid<Entwurf> entwurfGrid;
     
@@ -32,18 +31,19 @@ public class AdminView extends HorizontalLayout implements AfterNavigationObserv
         this.entwurfRepository = entwurfRepository;
     
         entwurfGrid = new Grid<>();
+        entwurfGrid.addColumn(it -> it.getUuid().toString()).setHeader("UUID");
+        entwurfGrid.addComponentColumn(this::test);
         
-        addClassName("hello-world-view");
-        name = new TextField("Your name");
-        sayHello = new Button("Say hello");
-        add(name, sayHello);
-        setVerticalComponentAlignment(Alignment.END, name, sayHello);
-        sayHello.addClickListener(e -> {
-            Notification.show("Hello " + name.getValue());
-        });
         this.add(entwurfGrid);
     }
     
+    private Component test(Entwurf entwurf) {
+        Button showPermissionsButton = new Button("Springe zu");
+        showPermissionsButton.addClickListener(buttonClickEvent ->
+                                                       this.getUI().ifPresent(it -> it.navigate(EntwurfView.class, entwurf.getUuid().toString()))
+        );
+        return showPermissionsButton;
+    }
     
     @Override
     public void afterNavigation(AfterNavigationEvent afterNavigationEvent) {

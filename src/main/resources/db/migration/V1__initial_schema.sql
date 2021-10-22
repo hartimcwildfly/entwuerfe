@@ -6,6 +6,11 @@ CREATE TABLE entwurf
     id SERIAL PRIMARY KEY,
     uuid UUID NOT NULL,
     entwurf BYTEA NOT NULL,
+
+--     kundennummer VARCHAR NOT NULL,
+--     kundenname VARCHAR NOT NULL,
+--     projektname VARCHAR NOT NULL,
+
     akzeptiert BOOLEAN,
     akzeptiert_von_vorname VARCHAR,
     akzeptiert_von_nachname VARCHAR,
