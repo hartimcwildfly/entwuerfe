@@ -35,7 +35,6 @@ public class EntwurfHinzufuegenView extends VerticalLayout {
         Upload upload = new Upload();
         upload.setAcceptedFileTypes(".jpeg", ".jpg");
         upload.setMaxFiles(1);
-        upload.setMaxFileSize(16 * 1024 * 1024);
         MemoryBuffer receiver = new MemoryBuffer();
         upload.setReceiver(receiver);
     
