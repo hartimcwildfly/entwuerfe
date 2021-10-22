@@ -26,7 +26,28 @@
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-spring-boot-starter</artifactId>
 		</dependency>
-
+		
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>io.vavr</groupId>
+			<artifactId>vavr</artifactId>
+			<version>0.10.4</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -53,8 +74,72 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.jooq</groupId>
+				<artifactId>jooq-codegen-maven</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.jooq</groupId>
+						<artifactId>jooq-meta-extensions</artifactId>
+						<version>3.14.15</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<generator>
+						<database>
+							<name>org.jooq.meta.extensions.ddl.DDLDatabase</name>
+							<properties>
+								<property>
+									<key>scripts</key>
+									<value>src/main/resources/db/migration/V*__*.sql</value>
+								</property>
+								<property>
+									<key>sort</key>
+									<value>flyway</value>
+								</property>
+								
+								<!-- The default schema for unqualified objects:
+						
+									 - public: all unqualified objects are located in the PUBLIC (upper case) schema
+									 - none: all unqualified objects are located in the default schema (default)
+									 
+									 This configuration can be overridden with the schema mapping feature -->
+								<property>
+									<key>unqualifiedSchema</key>
+									<value>none</value>
+								</property>
+								
+								<!-- The default name case for unquoted objects:
+								
+									 - as_is: unquoted object names are kept unquoted
+									 - upper: unquoted object names are turned into upper case (most databases)
+									 - lower: unquoted object names are turned into lower case (e.g. PostgreSQL) -->
+								<property>
+									<key>defaultNameCase</key>
+									<value>lower</value>
+								</property>
+							</properties>
+						</database>
+					</generator>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
