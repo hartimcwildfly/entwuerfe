@@ -33,8 +33,13 @@ public class OffeneEntwuerfeView extends HorizontalLayout implements AfterNaviga
     
         entwurfGrid = new Grid<>();
         entwurfGrid.addColumn(it -> it.getUuid().toString()).setHeader("UUID");
+        entwurfGrid.addColumn(it -> it.getKundennummer()).setHeader("Kundennummer").setSortable(true);
+        entwurfGrid.addColumn(it -> it.getKundenname()).setHeader("Kundenname");
+        entwurfGrid.addColumn(it -> it.getProjektnummer()).setHeader("Projektnummer").setSortable(true);
+        entwurfGrid.addColumn(it -> it.getProjektname()).setHeader("Projektname");
+        entwurfGrid.addColumn(it -> it.getCreatedAt()).setHeader("Erstellt am").setSortable(true);
         entwurfGrid.addComponentColumn(this::test);
-        
+    
         this.add(entwurfGrid);
     }
     
