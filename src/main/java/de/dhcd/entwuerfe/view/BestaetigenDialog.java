@@ -7,7 +7,7 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.textfield.TextField;
 
 import de.dhcd.entwuerfe.model.Entwurf;
-import de.dhcd.entwuerfe.model.EntwurfRepositoryJooq;
+import de.dhcd.entwuerfe.model.EntwurfRepository;
 
 
 public class BestaetigenDialog extends Dialog {
@@ -16,7 +16,7 @@ public class BestaetigenDialog extends Dialog {
     private final TextField lastnameField  = new TextField("Nachname");
     private final Button    button         = new Button("Ablehnen");
     
-    public BestaetigenDialog(EntwurfRepositoryJooq entwurfRepository, Entwurf entwurf) {
+    public BestaetigenDialog(EntwurfRepository entwurfRepository, Entwurf entwurf) {
         firstnameField.setRequired(true);
         lastnameField.setRequired(true);
         

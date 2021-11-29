@@ -14,7 +14,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import de.dhcd.entwuerfe.model.Entwurf;
-import de.dhcd.entwuerfe.model.EntwurfRepositoryJooq;
+import de.dhcd.entwuerfe.model.EntwurfRepository;
 import de.dhcd.entwuerfe.model.KeinJPEGBildException;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EntwurfHinzufuegenView extends VerticalLayout {
     
-    private final EntwurfRepositoryJooq entwurfRepository;
+    private final EntwurfRepository entwurfRepository;
     
-    public EntwurfHinzufuegenView(EntwurfRepositoryJooq entwurfRepository) {
+    public EntwurfHinzufuegenView(EntwurfRepository entwurfRepository) {
         this.entwurfRepository = entwurfRepository;
         
         IntegerField kundennummer = new IntegerField("Kundennummer");

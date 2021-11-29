@@ -18,7 +18,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 
 import de.dhcd.entwuerfe.model.Entwurf;
-import de.dhcd.entwuerfe.model.EntwurfRepositoryJooq;
+import de.dhcd.entwuerfe.model.EntwurfRepository;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 
@@ -27,14 +27,14 @@ import io.vavr.control.Try;
 @Route(value = "entwurf")
 public class EntwurfView extends VerticalLayout implements HasUrlParameter<String>, AfterNavigationObserver {
     
-    private EntwurfRepositoryJooq entwurfRepository;
-    private Option<Entwurf>       entwurf     = Option.none();
-    private Try<UUID>             entwurfUUID = Try.failure(new NullPointerException("Not inital value set"));
+    private EntwurfRepository entwurfRepository;
+    private Option<Entwurf>   entwurf     = Option.none();
+    private Try<UUID>         entwurfUUID = Try.failure(new NullPointerException("Not inital value set"));
     
     private final Button confirmButton = new Button("Annehmen");
     private final Button declineButton = new Button("Ablehnen");
     
-    public EntwurfView(EntwurfRepositoryJooq entwurfRepository) {
+    public EntwurfView(EntwurfRepository entwurfRepository) {
         this.entwurfRepository = entwurfRepository;
         
         confirmButton.addClickListener(clickEvent -> {

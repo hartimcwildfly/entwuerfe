@@ -16,7 +16,6 @@ import lombok.NonNull;
 @Getter
 public class Entwurf {
     
-    private final Integer id;
     @NonNull
     private final UUID    uuid;
     @NonNull
@@ -40,7 +39,6 @@ public class Entwurf {
     
     private Entwurf(Entwurf entwurf, EntwurfStatus status, String confirmedByFirstname, String confirmedByLastname, String confirmedComment) {
         this(
-                entwurf.id,
                 entwurf.uuid,
                 entwurf.content,
                 entwurf.getKundennummer(),
@@ -59,7 +57,6 @@ public class Entwurf {
         Try.of(() -> (content[0] & 0xFF) == 0xFF && (content[1] & 0xD8) == 0xD8).filter(it -> it).getOrElseThrow(
                 KeinJPEGBildException::new);
         return new Entwurf(
-                null,
                 UUID.randomUUID(),
                 content,
                 kundennummer,

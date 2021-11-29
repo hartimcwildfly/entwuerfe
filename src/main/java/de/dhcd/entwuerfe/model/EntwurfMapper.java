@@ -1,9 +1,7 @@
 package de.dhcd.entwuerfe.model;
 
 
-import org.jooq.generated.tables.records.EntwurfRecord;
-
-import io.vavr.control.Option;
+import org.jooq.generated.dhcd.tables.records.EntwurfRecord;
 
 
 public class EntwurfMapper {
@@ -11,7 +9,6 @@ public class EntwurfMapper {
     public static EntwurfRecord toRecord(Entwurf entwurf) {
         EntwurfRecord entwurfRecord = new EntwurfRecord();
     
-        Option.of(entwurf.getId()).forEach(entwurfRecord::setId); // setId(null) and not calling setId at all results in different behaviour
         entwurfRecord.setUuid(entwurf.getUuid());
         entwurfRecord.setEntwurf(entwurf.getContent());
     
@@ -30,7 +27,7 @@ public class EntwurfMapper {
     }
     
     public static Entwurf toModel(EntwurfRecord entwurfRecord) {
-        return new Entwurf(entwurfRecord.getId(), entwurfRecord.getUuid(), entwurfRecord.getEntwurf(),
+        return new Entwurf(entwurfRecord.getUuid(), entwurfRecord.getEntwurf(),
                            entwurfRecord.getKundennummer(),
                            entwurfRecord.getKundenname(),
                            entwurfRecord.getProjektnummer(),

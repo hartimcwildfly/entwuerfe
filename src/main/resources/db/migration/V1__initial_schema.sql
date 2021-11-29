@@ -1,9 +1,8 @@
--- CREATE SCHEMA IF NOT EXISTS dhcd;
+CREATE SCHEMA IF NOT EXISTS dhcd;
 
-CREATE TABLE entwurf
+CREATE TABLE dhcd.entwurf
 (
-    id                      SERIAL PRIMARY KEY,
-    uuid                    UUID                     NOT NULL,
+    uuid                    UUID PRIMARY KEY,
     entwurf                 BYTEA                    NOT NULL,
     erstellt_am             TIMESTAMP WITH TIME ZONE NOT NULL,
 
@@ -19,5 +18,5 @@ CREATE TABLE entwurf
     akzeptiert_am           TIMESTAMP WITH TIME ZONE
 );
 
-CREATE UNIQUE INDEX ON entwurf (uuid);
+CREATE UNIQUE INDEX ON dhcd.entwurf (uuid);
 

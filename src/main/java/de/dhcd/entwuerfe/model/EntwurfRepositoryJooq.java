@@ -6,7 +6,8 @@ import java.util.stream.Stream;
 
 import org.jooq.DSLContext;
 import org.jooq.exception.NoDataFoundException;
-import org.jooq.generated.Tables;
+import org.jooq.generated.dhcd.Tables;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.context.annotation.ApplicationScope;
 
@@ -16,6 +17,7 @@ import io.vavr.control.Try;
 
 @Repository
 @ApplicationScope
+@Profile("persistence")
 public class EntwurfRepositoryJooq implements EntwurfRepository {
     
     private final DSLContext dslContext;
