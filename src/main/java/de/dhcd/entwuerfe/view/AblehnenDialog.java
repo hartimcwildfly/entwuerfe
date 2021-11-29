@@ -23,16 +23,19 @@ public class AblehnenDialog extends Dialog {
         lastnameField.setRequired(true);
         
         HasValue.ValueChangeListener valueChangeListener = valueChangeEvent -> button.setEnabled(isValid());
-        
+    
         commentField.addValueChangeListener(valueChangeListener);
         firstnameField.addValueChangeListener(valueChangeListener);
         lastnameField.addValueChangeListener(valueChangeListener);
-        
+    
         button.addClickListener(clickEvent -> {
             Entwurf updatedEntwurf = entwurf.ablehnen(firstnameField.getValue(), lastnameField.getValue(), commentField.getValue());
             entwurfRepository.update(updatedEntwurf);
             this.getUI().ifPresent(it -> it.navigate(SentView.class));
+            this.close();
         });
+    
+        this.add(firstnameField, lastnameField, commentField, button);
     }
     
     private boolean isValid() {

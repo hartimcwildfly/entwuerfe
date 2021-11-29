@@ -21,15 +21,18 @@ public class BestaetigenDialog extends Dialog {
         lastnameField.setRequired(true);
         
         HasValue.ValueChangeListener valueChangeListener = valueChangeEvent -> button.setEnabled(isValid());
-        
+    
         firstnameField.addValueChangeListener(valueChangeListener);
         lastnameField.addValueChangeListener(valueChangeListener);
-        
+    
         button.addClickListener(clickEvent -> {
             Entwurf updatedEntwurf = entwurf.akzeptieren(firstnameField.getValue(), lastnameField.getValue());
             entwurfRepository.update(updatedEntwurf);
             this.getUI().ifPresent(it -> it.navigate(SentView.class));
+            this.close();
         });
+    
+        this.add(firstnameField, lastnameField, button);
     }
     
     private boolean isValid() {
