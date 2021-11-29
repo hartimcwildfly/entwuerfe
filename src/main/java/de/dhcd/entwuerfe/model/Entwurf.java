@@ -72,10 +72,16 @@ public class Entwurf {
     }
     
     public Entwurf akzeptieren(String confirmedByFirstname, String confirmedByLastname) {
+        if (this.getStatus() != EntwurfStatus.PENDING) {
+            throw new IllegalStateException("Entwurf wurde bereits akzeptiert oder abgelehnt");
+        }
         return new Entwurf(this, EntwurfStatus.CONFIRMED, confirmedByFirstname, confirmedByLastname, null);
     }
     
     public Entwurf ablehnen(String firstname, String lastname, String comment) {
+        if (this.getStatus() != EntwurfStatus.PENDING) {
+            throw new IllegalStateException("Entwurf wurde bereits akzeptiert oder abgelehnt");
+        }
         return new Entwurf(this, EntwurfStatus.DECLINED, firstname, lastname, comment);
     }
     

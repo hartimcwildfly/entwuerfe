@@ -1,6 +1,7 @@
 package de.dhcd.entwuerfe.model;
 
 
+import java.util.Comparator;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -37,6 +38,13 @@ public class EnwturfRepositoryInMemory implements EntwurfRepository {
     
     @Override
     public Stream<Entwurf> holeOffene() {
-        return entwuerfe.filter(it -> it.getStatus() == EntwurfStatus.PENDING).toJavaStream();
+        return entwuerfe.filter(it -> it.getStatus() == EntwurfStatus.PENDING)
+                        .toJavaStream().sorted(Comparator.comparing(Entwurf::getCreatedAt).reversed());
+    }
+    
+    @Override
+    public Stream<Entwurf> holeArchivierte() {
+        return entwuerfe.filter(it -> it.getStatus() == EntwurfStatus.CONFIRMED || it.getStatus() == EntwurfStatus.DECLINED)
+                        .toJavaStream().sorted(Comparator.comparing(Entwurf::getCreatedAt).reversed());
     }
 }

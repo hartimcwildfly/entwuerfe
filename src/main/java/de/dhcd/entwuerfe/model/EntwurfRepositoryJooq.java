@@ -1,6 +1,7 @@
 package de.dhcd.entwuerfe.model;
 
 
+import java.util.Comparator;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -47,6 +48,13 @@ public class EntwurfRepositoryJooq implements EntwurfRepository {
     
     @Override
     public Stream<Entwurf> holeOffene() {
-        return dslContext.selectFrom(Tables.ENTWURF).where(Tables.ENTWURF.AKZEPTIERT.isNull()).fetch().stream().map(EntwurfMapper::toModel);
+        return dslContext.selectFrom(Tables.ENTWURF).where(Tables.ENTWURF.AKZEPTIERT.isNull()).fetch().stream().map(EntwurfMapper::toModel)
+                         .sorted(Comparator.comparing(Entwurf::getCreatedAt).reversed());
+    }
+    
+    @Override
+    public Stream<Entwurf> holeArchivierte() {
+        return dslContext.selectFrom(Tables.ENTWURF).where(Tables.ENTWURF.AKZEPTIERT.isNotNull()).fetch().stream().map(EntwurfMapper::toModel)
+                         .sorted(Comparator.comparing(Entwurf::getCreatedAt).reversed());
     }
 }

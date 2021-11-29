@@ -32,6 +32,7 @@ public class AdminLayout extends AppLayout {
     private Component createDrawerContent() {
         Tabs tabs = new Tabs(
                 new Tab(new RouterLink("Offene Entwürfe", OffeneEntwuerfeView.class)),
+                new Tab(new RouterLink("Archivierte Entwürfe", ArchivierteEntwuerfeView.class)),
                 new Tab(new RouterLink("Entwurf hinzufügen", EntwurfHinzufuegenView.class))
         );
         tabs.setOrientation(VERTICAL);

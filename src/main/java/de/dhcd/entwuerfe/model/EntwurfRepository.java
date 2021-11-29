@@ -15,4 +15,6 @@ public interface EntwurfRepository {
     Option<Entwurf> get(UUID uuid);
     
     Stream<Entwurf> holeOffene();
+    
+    Stream<Entwurf> holeArchivierte();
 }
