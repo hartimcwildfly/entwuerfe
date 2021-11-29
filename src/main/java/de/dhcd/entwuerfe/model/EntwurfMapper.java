@@ -20,7 +20,7 @@ public class EntwurfMapper {
         entwurfRecord.setProjektnummer(entwurf.getProjektnummer());
         entwurfRecord.setProjektname(entwurf.getProjektname());
     
-        entwurfRecord.setAkzeptiert(entwurf.getConfirmed());
+        entwurfRecord.setAkzeptiert(mapStatus(entwurf.getStatus()));
         entwurfRecord.setAkzeptiertVonVorname(entwurf.getConfirmedByFirstname());
         entwurfRecord.setAkzeptiertVonNachname(entwurf.getConfirmedByLastname());
         entwurfRecord.setAkzeptiertKommentar(entwurf.getConfirmedComment());
@@ -29,18 +29,33 @@ public class EntwurfMapper {
         return entwurfRecord;
     }
     
-    public static Entwurf toModel(EntwurfRecord entwurfRecord ) {
+    public static Entwurf toModel(EntwurfRecord entwurfRecord) {
         return new Entwurf(entwurfRecord.getId(), entwurfRecord.getUuid(), entwurfRecord.getEntwurf(),
                            entwurfRecord.getKundennummer(),
                            entwurfRecord.getKundenname(),
                            entwurfRecord.getProjektnummer(),
                            entwurfRecord.getProjektname(),
-                           entwurfRecord.getAkzeptiert(),
+                           mapStatusToModel(entwurfRecord.getAkzeptiert()),
                            entwurfRecord.getAkzeptiertVonVorname(),
                            entwurfRecord.getAkzeptiertVonNachname(),
                            entwurfRecord.getAkzeptiertKommentar(),
                            entwurfRecord.getAkzeptiertAm(),
                            entwurfRecord.getErstelltAm()
         );
+    }
+    
+    private static EntwurfStatus mapStatusToModel(Boolean confirmed) {
+        return switch (confirmed) {
+            case null -> EntwurfStatus.PENDING;
+            case Boolean b -> b ? EntwurfStatus.CONFIRMED : EntwurfStatus.DECLINED;
+        };
+    }
+    
+    private static Boolean mapStatus(EntwurfStatus entwurfStatus) {
+        return switch (entwurfStatus) {
+            case CONFIRMED -> true;
+            case DECLINED -> false;
+            case PENDING -> null;
+        };
     }
 }

@@ -16,7 +16,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 
 import de.dhcd.entwuerfe.model.Entwurf;
-import de.dhcd.entwuerfe.model.EntwurfRepository;
+import de.dhcd.entwuerfe.model.EntwurfRepositoryJooq;
 import de.dhcd.entwuerfe.view.EntwurfView;
 
 
@@ -25,12 +25,12 @@ import de.dhcd.entwuerfe.view.EntwurfView;
 @RouteAlias(value = "", layout = AdminLayout.class)
 public class OffeneEntwuerfeView extends HorizontalLayout implements AfterNavigationObserver {
     
-    private final EntwurfRepository entwurfRepository;
-    private Grid<Entwurf> entwurfGrid;
+    private final EntwurfRepositoryJooq entwurfRepository;
+    private       Grid<Entwurf>         entwurfGrid;
     
-    public OffeneEntwuerfeView(EntwurfRepository entwurfRepository) {
+    public OffeneEntwuerfeView(EntwurfRepositoryJooq entwurfRepository) {
         this.entwurfRepository = entwurfRepository;
-    
+        
         entwurfGrid = new Grid<>();
         entwurfGrid.addColumn(it -> it.getUuid().toString()).setHeader("UUID");
         entwurfGrid.addColumn(it -> it.getKundennummer()).setHeader("Kundennummer").setSortable(true);
@@ -38,6 +38,7 @@ public class OffeneEntwuerfeView extends HorizontalLayout implements AfterNaviga
         entwurfGrid.addColumn(it -> it.getProjektnummer()).setHeader("Projektnummer").setSortable(true);
         entwurfGrid.addColumn(it -> it.getProjektname()).setHeader("Projektname");
         entwurfGrid.addColumn(it -> it.getCreatedAt()).setHeader("Erstellt am").setSortable(true);
+        entwurfGrid.addColumn(it -> it.getStatus().getLabel()).setHeader("Status");
         entwurfGrid.addComponentColumn(this::test);
     
         this.add(entwurfGrid);

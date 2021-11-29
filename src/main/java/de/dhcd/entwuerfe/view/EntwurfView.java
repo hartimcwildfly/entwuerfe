@@ -4,15 +4,11 @@ package de.dhcd.entwuerfe.view;
 import java.io.ByteArrayInputStream;
 import java.util.UUID;
 
-import org.jooq.generated.tables.records.EntwurfRecord;
-
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.BeforeEvent;
@@ -22,7 +18,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 
 import de.dhcd.entwuerfe.model.Entwurf;
-import de.dhcd.entwuerfe.model.EntwurfRepository;
+import de.dhcd.entwuerfe.model.EntwurfRepositoryJooq;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 
@@ -31,11 +27,24 @@ import io.vavr.control.Try;
 @Route(value = "entwurf")
 public class EntwurfView extends VerticalLayout implements HasUrlParameter<String>, AfterNavigationObserver {
     
-    private EntwurfRepository entwurfRepository;
-    private Try<UUID>         entwurfUUID = Try.failure(new NullPointerException("Not inital value set"));
+    private EntwurfRepositoryJooq entwurfRepository;
+    private Option<Entwurf>       entwurf     = Option.none();
+    private Try<UUID>             entwurfUUID = Try.failure(new NullPointerException("Not inital value set"));
     
-    public EntwurfView(EntwurfRepository entwurfRepository) {
+    private final Button confirmButton = new Button("Annehmen");
+    private final Button declineButton = new Button("Ablehnen");
+    
+    public EntwurfView(EntwurfRepositoryJooq entwurfRepository) {
         this.entwurfRepository = entwurfRepository;
+        
+        confirmButton.addClickListener(clickEvent -> {
+            new BestaetigenDialog(entwurfRepository, entwurf.get()).open();
+        });
+        declineButton.addClickListener(clickEvent -> {
+            new AblehnenDialog(entwurfRepository, entwurf.get()).open();
+        });
+        
+        this.add(new HorizontalLayout(declineButton, confirmButton));
     }
     
     @Override
@@ -52,6 +61,7 @@ public class EntwurfView extends VerticalLayout implements HasUrlParameter<Strin
     }
     
     private void ladeEntwurf(final Entwurf entwurf) {
+        this.entwurf = Option.of(entwurf);
         Image image = new Image(new StreamResource("ImageName", () -> new ByteArrayInputStream(entwurf.getContent())), "Entwurf");
         image.setMaxHeight(900, Unit.PIXELS);
         image.setMaxWidth(1800, Unit.PIXELS);

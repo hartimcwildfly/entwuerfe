@@ -2,6 +2,7 @@ package de.dhcd.entwuerfe.model;
 
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 import io.vavr.control.Try;
@@ -30,14 +31,14 @@ public class Entwurf {
     @NonNull
     private final String  projektname;
     
-    private final Boolean confirmed;
-    private final String confirmedByFirstname;
-    private final String confirmedByLastname;
-    private final String confirmedComment;
+    private final EntwurfStatus  status;
+    private final String         confirmedByFirstname;
+    private final String         confirmedByLastname;
+    private final String         confirmedComment;
     private final OffsetDateTime confirmedAt;
     private final OffsetDateTime createdAt;
     
-    private Entwurf(Entwurf entwurf, boolean confirmed, String confirmedByFirstname, String confirmedByLastname, String confirmedComment) {
+    private Entwurf(Entwurf entwurf, EntwurfStatus status, String confirmedByFirstname, String confirmedByLastname, String confirmedComment) {
         this(
                 entwurf.id,
                 entwurf.uuid,
@@ -46,7 +47,7 @@ public class Entwurf {
                 entwurf.getKundenname(),
                 entwurf.getProjektnummer(),
                 entwurf.getProjektname(),
-                confirmed,
+                status,
                 confirmedByFirstname,
                 confirmedByLastname,
                 confirmedComment,
@@ -65,7 +66,7 @@ public class Entwurf {
                 kundenname,
                 projektnummer,
                 projektname,
-                null,
+                EntwurfStatus.PENDING,
                 null,
                 null,
                 null,
@@ -74,10 +75,27 @@ public class Entwurf {
     }
     
     public Entwurf akzeptieren(String confirmedByFirstname, String confirmedByLastname) {
-        return new Entwurf(this, true, confirmedByFirstname, confirmedByLastname, null);
+        return new Entwurf(this, EntwurfStatus.CONFIRMED, confirmedByFirstname, confirmedByLastname, null);
     }
     
-    public Entwurf ablehnen() {
-        return new Entwurf(this, true, confirmedByFirstname, confirmedByLastname, confirmedComment);
+    public Entwurf ablehnen(String firstname, String lastname, String comment) {
+        return new Entwurf(this, EntwurfStatus.DECLINED, firstname, lastname, comment);
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Entwurf entwurf = (Entwurf) o;
+        return uuid.equals(entwurf.uuid);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid);
     }
 }

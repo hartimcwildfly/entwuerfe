@@ -14,7 +14,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import de.dhcd.entwuerfe.model.Entwurf;
-import de.dhcd.entwuerfe.model.EntwurfRepository;
+import de.dhcd.entwuerfe.model.EntwurfRepositoryJooq;
 import de.dhcd.entwuerfe.model.KeinJPEGBildException;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
@@ -25,18 +25,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EntwurfHinzufuegenView extends VerticalLayout {
     
-    private final EntwurfRepository entwurfRepository;
+    private final EntwurfRepositoryJooq entwurfRepository;
     
-    public EntwurfHinzufuegenView(EntwurfRepository entwurfRepository) {
+    public EntwurfHinzufuegenView(EntwurfRepositoryJooq entwurfRepository) {
         this.entwurfRepository = entwurfRepository;
-    
+        
         IntegerField kundennummer = new IntegerField("Kundennummer");
         kundennummer.setRequiredIndicatorVisible(true);
         kundennummer.setInvalid(true);
         kundennummer.setMin(10_000);
         kundennummer.setMax(99_999);
         kundennummer.setErrorMessage("Kundennummer muss zwischen 10000 und 99999 sein");
-    
+        
         TextField kundenname = new TextField("Kundenname");
         kundenname.setRequired(true);
         kundenname.setInvalid(true);
