@@ -4,6 +4,7 @@ package de.dhcd.entwuerfe.view;
 import java.io.ByteArrayInputStream;
 import java.util.UUID;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Image;
@@ -17,8 +18,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 
-import de.dhcd.entwuerfe.model.Entwurf;
-import de.dhcd.entwuerfe.model.EntwurfRepository;
+import de.dhcd.entwuerfe.adapter.api.EntwurfRepository;
+import de.dhcd.entwuerfe.model.draft.Draft;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 
@@ -28,7 +29,7 @@ import io.vavr.control.Try;
 public class EntwurfView extends VerticalLayout implements HasUrlParameter<String>, AfterNavigationObserver {
     
     private EntwurfRepository entwurfRepository;
-    private Option<Entwurf>   entwurf     = Option.none();
+    private Option<Draft>     entwurf     = Option.none();
     private Try<UUID>         entwurfUUID = Try.failure(new NullPointerException("Not inital value set"));
     
     private final Button confirmButton = new Button("Annehmen");
@@ -36,15 +37,17 @@ public class EntwurfView extends VerticalLayout implements HasUrlParameter<Strin
     
     public EntwurfView(EntwurfRepository entwurfRepository) {
         this.entwurfRepository = entwurfRepository;
-        
+    
         confirmButton.addClickListener(clickEvent -> {
             new BestaetigenDialog(entwurfRepository, entwurf.get()).open();
         });
         declineButton.addClickListener(clickEvent -> {
             new AblehnenDialog(entwurfRepository, entwurf.get()).open();
         });
-        
+    
         this.add(new HorizontalLayout(declineButton, confirmButton));
+    
+        UI.getCurrent().getSession().getBrowser().getBrowserApplication()
     }
     
     @Override
@@ -60,7 +63,7 @@ public class EntwurfView extends VerticalLayout implements HasUrlParameter<Strin
                    .forEach(this::ladeEntwurf);
     }
     
-    private void ladeEntwurf(final Entwurf entwurf) {
+    private void ladeEntwurf(final Draft entwurf) {
         this.entwurf = Option.of(entwurf);
         Image image = new Image(new StreamResource("ImageName", () -> new ByteArrayInputStream(entwurf.getContent())), "Entwurf");
         image.setMaxHeight(900, Unit.PIXELS);

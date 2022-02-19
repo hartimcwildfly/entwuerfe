@@ -1,4 +1,4 @@
-package de.dhcd.entwuerfe.model;
+package de.dhcd.entwuerfe.adapter.inmemory;
 
 
 import java.util.Comparator;
@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.context.annotation.ApplicationScope;
 
+import de.dhcd.entwuerfe.adapter.api.EntwurfRepository;
+import de.dhcd.entwuerfe.model.EntwurfStatus;
+import de.dhcd.entwuerfe.model.draft.Draft;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.Set;
 import io.vavr.control.Option;
@@ -19,32 +22,32 @@ import io.vavr.control.Option;
 @Profile("!persistence")
 public class EnwturfRepositoryInMemory implements EntwurfRepository {
     
-    private Set<Entwurf> entwuerfe = HashSet.empty();
+    private Set<Draft> entwuerfe = HashSet.empty();
     
     @Override
-    public void create(Entwurf entwurf) {
+    public void create(Draft entwurf) {
         entwuerfe = entwuerfe.add(entwurf);
     }
     
     @Override
-    public void update(Entwurf entwurf) {
+    public void update(Draft entwurf) {
         entwuerfe = entwuerfe.remove(entwurf).add(entwurf);
     }
     
     @Override
-    public Option<Entwurf> get(UUID uuid) {
+    public Option<Draft> get(UUID uuid) {
         return entwuerfe.filter(it -> it.getUuid().equals(uuid)).singleOption();
     }
     
     @Override
-    public Stream<Entwurf> holeOffene() {
+    public Stream<Draft> holeOffene() {
         return entwuerfe.filter(it -> it.getStatus() == EntwurfStatus.PENDING)
-                        .toJavaStream().sorted(Comparator.comparing(Entwurf::getCreatedAt).reversed());
+                        .toJavaStream().sorted(Comparator.comparing(Draft::getCreatedAt).reversed());
     }
     
     @Override
-    public Stream<Entwurf> holeArchivierte() {
-        return entwuerfe.filter(it -> it.getStatus() == EntwurfStatus.CONFIRMED || it.getStatus() == EntwurfStatus.DECLINED)
-                        .toJavaStream().sorted(Comparator.comparing(Entwurf::getCreatedAt).reversed());
+    public Stream<Draft> holeArchivierte() {
+        return entwuerfe.filter(it -> it.getStatus() == EntwurfStatus.APPROVED || it.getStatus() == EntwurfStatus.DECLINED)
+                        .toJavaStream().sorted(Comparator.comparing(Draft::getCreatedAt).reversed());
     }
 }

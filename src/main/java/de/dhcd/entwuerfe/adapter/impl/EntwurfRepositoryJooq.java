@@ -1,4 +1,4 @@
-package de.dhcd.entwuerfe.model;
+package de.dhcd.entwuerfe.adapter.impl;
 
 
 import java.util.Comparator;
@@ -12,6 +12,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.context.annotation.ApplicationScope;
 
+import de.dhcd.entwuerfe.adapter.api.EntwurfRepository;
+import de.dhcd.entwuerfe.model.EntwurfMapper;
+import de.dhcd.entwuerfe.model.draft.Draft;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 
@@ -28,17 +31,17 @@ public class EntwurfRepositoryJooq implements EntwurfRepository {
     }
     
     @Override
-    public void create(Entwurf entwurf) {
+    public void create(Draft entwurf) {
         dslContext.executeInsert(EntwurfMapper.toRecord(entwurf));
     }
     
     @Override
-    public void update(Entwurf entwurf) {
+    public void update(Draft entwurf) {
         dslContext.executeUpdate(EntwurfMapper.toRecord(entwurf));
     }
     
     @Override
-    public Option<Entwurf> get(UUID uuid) {
+    public Option<Draft> get(UUID uuid) {
         return Try.of(() -> dslContext.selectFrom(Tables.ENTWURF).where(Tables.ENTWURF.UUID.eq(uuid)).fetchSingle())
                   .map(EntwurfMapper::toModel)
                   .map(Option::of)
@@ -47,14 +50,14 @@ public class EntwurfRepositoryJooq implements EntwurfRepository {
     }
     
     @Override
-    public Stream<Entwurf> holeOffene() {
+    public Stream<Draft> holeOffene() {
         return dslContext.selectFrom(Tables.ENTWURF).where(Tables.ENTWURF.AKZEPTIERT.isNull()).fetch().stream().map(EntwurfMapper::toModel)
-                         .sorted(Comparator.comparing(Entwurf::getCreatedAt).reversed());
+                         .sorted(Comparator.comparing(Draft::getCreatedAt).reversed());
     }
     
     @Override
-    public Stream<Entwurf> holeArchivierte() {
+    public Stream<Draft> holeArchivierte() {
         return dslContext.selectFrom(Tables.ENTWURF).where(Tables.ENTWURF.AKZEPTIERT.isNotNull()).fetch().stream().map(EntwurfMapper::toModel)
-                         .sorted(Comparator.comparing(Entwurf::getCreatedAt).reversed());
+                         .sorted(Comparator.comparing(Draft::getCreatedAt).reversed());
     }
 }

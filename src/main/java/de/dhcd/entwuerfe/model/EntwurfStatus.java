@@ -5,7 +5,7 @@ import lombok.Getter;
 
 
 public enum EntwurfStatus {
-    CONFIRMED("Bestätigt"), DECLINED("Abgelehnt"), PENDING("Offen");
+    APPROVED("Freigegeben"), DECLINED("Abgelehnt"), PENDING("Offen");
     
     @Getter
     private final String label;

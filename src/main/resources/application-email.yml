@@ -1,0 +1,13 @@
+spring:
+  mail:
+    host: test
+    password: asdf
+    port:
+    username:
+    protocol:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

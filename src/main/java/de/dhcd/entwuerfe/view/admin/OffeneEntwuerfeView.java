@@ -15,8 +15,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 
-import de.dhcd.entwuerfe.model.Entwurf;
-import de.dhcd.entwuerfe.model.EntwurfRepository;
+import de.dhcd.entwuerfe.adapter.api.EntwurfRepository;
+import de.dhcd.entwuerfe.model.draft.Draft;
 import de.dhcd.entwuerfe.view.EntwurfView;
 
 
@@ -26,7 +26,7 @@ import de.dhcd.entwuerfe.view.EntwurfView;
 public class OffeneEntwuerfeView extends HorizontalLayout implements AfterNavigationObserver {
     
     private final EntwurfRepository entwurfRepository;
-    private       Grid<Entwurf>     entwurfGrid;
+    private       Grid<Draft>       entwurfGrid;
     
     public OffeneEntwuerfeView(EntwurfRepository entwurfRepository) {
         this.entwurfRepository = entwurfRepository;
@@ -44,7 +44,7 @@ public class OffeneEntwuerfeView extends HorizontalLayout implements AfterNaviga
         this.add(entwurfGrid);
     }
     
-    private Component test(Entwurf entwurf) {
+    private Component test(Draft entwurf) {
         Button showPermissionsButton = new Button("Springe zu");
         showPermissionsButton.addClickListener(buttonClickEvent ->
                                                        this.getUI().ifPresent(it -> it.navigate(EntwurfView.class, entwurf.getUuid().toString()))
@@ -57,8 +57,8 @@ public class OffeneEntwuerfeView extends HorizontalLayout implements AfterNaviga
         ladeAlle(entwurfRepository.holeOffene());
     }
     
-    private void ladeAlle(Stream<Entwurf> entwurfStream) {
-        ListDataProvider<Entwurf> entwurfListDataProvider = DataProvider.fromStream(entwurfStream);
+    private void ladeAlle(Stream<Draft> entwurfStream) {
+        ListDataProvider<Draft> entwurfListDataProvider = DataProvider.fromStream(entwurfStream);
         entwurfGrid.setDataProvider(entwurfListDataProvider);
     }
     

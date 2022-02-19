@@ -13,9 +13,9 @@ import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-import de.dhcd.entwuerfe.model.Entwurf;
-import de.dhcd.entwuerfe.model.EntwurfRepository;
+import de.dhcd.entwuerfe.adapter.api.EntwurfRepository;
 import de.dhcd.entwuerfe.model.KeinJPEGBildException;
+import de.dhcd.entwuerfe.model.draft.PendingDraft;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 
@@ -107,7 +107,7 @@ public class EntwurfHinzufuegenView extends VerticalLayout {
                    Notification.show("Fehler beim Verarbeiten des Uploads", 6000, Notification.Position.MIDDLE);
                })
                .map(content ->
-                            Entwurf.erstelle(
+                            PendingDraft.erstelle(
                                     content,
                                     kundennummer.getValue(),
                                     kundenname.getValue(),
